@@ -1,32 +1,37 @@
 import os
 from dotenv import load_dotenv
-
 from langchain.chat_models import init_chat_model
-from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
 
 
 load_dotenv() 
 
 llm = init_chat_model(
     model=os.getenv("MODEL_NAME"),
-    temperature=0.1
+    temperature=1.0
 )
 
-messages = [
-   SystemMessage(content="Your are a helpful Corvit AI Assistant!")
-] 
+history = [{"role": "system", "content": "You are helpful ai assistant!"}]
 
+print("Welcome to cue chat!")
 while True:
-    question = input("You: ").strip()
+   question = input("You: ").strip()
 
-    if not question:
-       continue
-    if question in ("exit", "quit", "bye"):
-       print("Goodbye!")
-       break
+   if not question:
+      continue
+   if question in ("exit", "quit", "bye"):
+      print("Goodbye!")
+      break
 
-    messages.append(HumanMessage(content=question))
-    response = llm.invoke(messages)
-    messages.append(AIMessage(content=response.content))
+   history.append({
+      "role": "user",
+      "content": question
+   })
+   print("Bot: ", end="", flush=True)
 
-    print(f"Bot: {response.content}")
+   full = None  
+   for chunk in llm.stream(history):
+      print(chunk.text, end="", flush=True)
+      full = chunk if full is None else full + chunk
+   print()
+
+   history.append(full)
