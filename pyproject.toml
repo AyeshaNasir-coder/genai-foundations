@@ -1,0 +1,16 @@
+[project]
+name = "genai-foundations"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "AyeshaNasir", email = "ayeshanasir2737@gmail.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "langchain>=1.4.3",
+    "langchain-ollama>=1.1.0",
+    "python-dotenv>=1.2.4",
+    "streamlit>=1.65.0",
+]
+
